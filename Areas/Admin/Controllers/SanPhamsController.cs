@@ -81,7 +81,7 @@ namespace LTW.Areas.Admin.Controllers
                 {
                     string path = Path.Combine(Server.MapPath("~/Content/images"), Path.GetFileName(Hinh.FileName));
                     Hinh.SaveAs(path);
-                    sp.Hinh = "/Content/images/" + Hinh.FileName;
+                    sp.Hinh = "Content/images/" + Hinh.FileName;
                 }
 
                 data.SanPhams.InsertOnSubmit(sp);
