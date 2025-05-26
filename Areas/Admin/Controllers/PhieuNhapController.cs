@@ -12,33 +12,37 @@ namespace LTW.Areas.Admin.Controllers
     {
         MyDataDataContext data = new MyDataDataContext();
 
-      //  public ActionResult Create()
-        //{
-            
-       // }
+          public ActionResult Create()
+        {
+        // Lấy danh sách nhà cung cấp
+        var nccList = data.NCCs.ToList();
+        ViewBag.MaNCC = new SelectList(nccList, "MaNCC", "TenNCC");
+
+        // Lấy danh sách sản phẩm còn hoạt động
+        var spList = data.SanPhams.Where(s => s.TrangThai == true).ToList();
+        ViewBag.MaSP = new SelectList(spList, "MaSP", "TenSP", null);
+
+            return View();
+         }
 
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
-            try
+           try
             {
-                // Tạo phiếu nhập mới
                 var phieuNhap = new PhieuNhap
                 {
                     NgayNhap = DateTime.Now,
-                    MaNCC = Convert.ToInt32(collection["MaNCC"]),
-                    TongTien = 0, // Sẽ được cập nhật sau
-                    GhiChu = collection["GhiChu"],
-                    NguoiNhap = Convert.ToInt32(User.Identity.Name) // Assuming User.Identity.Name contains MaKH
+                    MaNCC = int.Parse(collection["MaNCC"]),
+                    TongTien = 0,
+                    GhiChu = collection["GhiChu"],  
+                    NguoiNhap=Convert.ToInt32(User.Identity.Name)  // Lấy người nhập từ Session
                 };
-
                 data.PhieuNhaps.InsertOnSubmit(phieuNhap);
                 data.SubmitChanges();
 
-                // Lấy mã phiếu nhập vừa tạo
                 int maPN = phieuNhap.MaPN;
 
-                // Xử lý chi tiết phiếu nhập
                 string[] maSPs = collection["MaSP"].Split(',');
                 string[] soLuongs = collection["SoLuong"].Split(',');
                 string[] donGias = collection["DonGia"].Split(',');
@@ -86,6 +90,7 @@ namespace LTW.Areas.Admin.Controllers
                 ViewBag.Error = "Lỗi nhập kho: " + ex.Message;
                 return View();
             }
+
         }
 
         // GET: Hiển thị danh sách phiếu nhập
