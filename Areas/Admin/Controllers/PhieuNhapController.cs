@@ -12,18 +12,10 @@ namespace LTW.Areas.Admin.Controllers
     {
         MyDataDataContext data = new MyDataDataContext();
 
-        public ActionResult Create()
-        {
-            // Lấy danh sách nhà cung cấp
-            var nccList = data.NCCs.ToList();
-            ViewBag.MaNCC = new SelectList(nccList, "MaNCC", "TenNCC");
-
-            // Lấy danh sách sản phẩm còn hoạt động
-            var spList = data.SanPhams.Where(s => s.TrangThai == true).ToList();
-            ViewBag.MaSP = new SelectList(spList, "MaSP", "TenSP", null);
-
-            return View();
-        }
+      //  public ActionResult Create()
+        //{
+            
+       // }
 
         [HttpPost]
         public ActionResult Create(FormCollection collection)
